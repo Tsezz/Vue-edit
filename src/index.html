@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/edittableSpan.css">
     <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="css/singUp.css">
     <title>Document</title>
 </head>
 
@@ -131,9 +132,40 @@
         </main>
         <div v-show="loginVisible" class="login">
             <form class="form">
-                登入 
-            <button @click="onCloseLogin">关闭</button>
-        </form>
+                <h2>登入</h2>
+                <button @click="onCloseLogin">关闭</button>
+                <div class="row">
+                    <label>邮箱</label>
+                    <input type="text">
+                </div>
+                <div class="row">
+                    <label>密码</label>
+                    <input type="password">
+                </div>
+                <div class="actions">
+                    <button>提交</button>
+                    <a href="#" @click="singUpVisible= true;loginVisible= false;">注册</a>
+                </div>
+            </form>
+        </div>
+        <div v-show="singUpVisible" class="singUp">
+            <form class="form">
+                <h2>注册</h2>
+                <button @click="onCloseLogin">关闭</button>
+                <div class="row">
+                    <label>邮箱</label>
+                    <input type="text">
+                </div>
+                <div class="row">
+                    <label>密码</label>
+                    <input type="password">
+                </div>
+                <div class="actions">
+                    <button>提交</button>
+                    <a href="#" @click="singUpVisible= false;loginVisible= true;">登入</a>
+                </div>
+            </form>
+        </div>
     </div>
     <script src="../vendors/av-min.js"></script>
     <script src="./js/av.js"></script>

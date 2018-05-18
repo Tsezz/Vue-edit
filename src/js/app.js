@@ -3,6 +3,7 @@ var app = new Vue({
     data: {
         editingName: false,
         loginVisible: false,
+        singUpVisible: false,
         resume: {
             name: '姓名',
             gender: '女',
