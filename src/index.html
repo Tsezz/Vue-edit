@@ -31,7 +31,7 @@
                 </ul>
             </div>
             <div class="down">
-                <button class="button">登出</button>
+                <button class="button" @click="onLogout">登出</button>
             </div>
 
         </aside>
@@ -131,37 +131,37 @@
             </div>
         </main>
         <div v-show="loginVisible" class="login">
-            <form class="form">
+            <form class="form" @submit.prevent="onLogin">
                 <h2>登入</h2>
                 <button @click="onCloseLogin">关闭</button>
                 <div class="row">
                     <label>邮箱</label>
-                    <input type="text">
+                    <input type="text" v-model="login.email">
                 </div>
                 <div class="row">
                     <label>密码</label>
-                    <input type="password">
+                    <input type="password" v-model="login.password">
                 </div>
                 <div class="actions">
-                    <button>提交</button>
+                    <button type="submit">提交</button>
                     <a href="#" @click="singUpVisible= true;loginVisible= false;">注册</a>
                 </div>
             </form>
         </div>
         <div v-show="singUpVisible" class="singUp">
-            <form class="form">
+            <form class="form" @submit="onSingUp">
                 <h2>注册</h2>
                 <button @click="onCloseLogin">关闭</button>
                 <div class="row">
                     <label>邮箱</label>
-                    <input type="text">
+                    <input type="text" v-model="singUp.email">
                 </div>
                 <div class="row">
                     <label>密码</label>
-                    <input type="password">
+                    <input type="password" v-model="singUp.password">
                 </div>
                 <div class="actions">
-                    <button>提交</button>
+                    <button type="submit">提交</button>
                     <a href="#" @click="singUpVisible= false;loginVisible= true;">登入</a>
                 </div>
             </form>

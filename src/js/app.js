@@ -11,6 +11,14 @@ var app = new Vue({
             jobTitle: '前端工程师',
             phone: '180123456789',
             email: '1@1.com'
+        },
+        singUp: {
+            email: '',
+            password: ''
+        },
+        login: {
+            email: '',
+            password: ''
         }
     },
     methods: {
@@ -18,8 +26,43 @@ var app = new Vue({
             console.log(key)
             this.resume[key] = value
         },
+        onLogin(e) {
+            console.log(this.login)
+            AV.User.logIn(this.login.email, this.login.password).then(function (user) {
+                console.log(user);
+            }, function (error) {
+                console.log(error)
+                if (error.code === 211) {
+                    alert('邮箱未注册')
+                } else if (error.code === 210) {
+                    alert('邮箱或密码错误')
+                }
+            });
+        },
+        onLogout(e) {
+            AV.User.logOut();
+            // 现在的 currentUser 是 null 了
+            var currentUser = AV.User.current();
+            alert('已注销')
+        },
+        onSingUp(e) {
+            e.preventDefault()
+            // 新建 AVUser 对象实例
+            const user = new AV.User();
+            // 设置用户名
+            user.setUsername(this.singUp.email);
+            // 设置密码
+            user.setPassword(this.singUp.password);
+            // 设置邮箱
+            user.setEmail(this.singUp.email);
+            user.signUp().then(function (user) {
+                console.log(user);
+            }, function (error) {
+            });
+        },
         onClickSave() {
-            currentUser = AV.User.current();
+            let currentUser = AV.User.current();
+            console.log(currentUser)
             if (!currentUser) {
                 this.showLogin()
             } else {
@@ -38,16 +81,21 @@ var app = new Vue({
                 //     console.error(error);
                 // });
             }
-            console.log(currentUser)
         },
-        onCloseLogin(){
+        onCloseLogin() {
             this.loginVisible = false
         },
-        showLogin(){
+        showLogin() {
             this.loginVisible = true;
         },
-        saveResume(){
-
+        saveResume() {
+            // 第一个参数是 className，第二个参数是 objectId
+            let { id } = AV.User.current()
+            var user = AV.Object.createWithoutData('User', id);
+            // 修改属性
+            user.set('resume', this.resume);
+            // 保存到云端
+            user.save();
         }
     }
 })
