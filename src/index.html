@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/edittableSpan.css">
     <link rel="stylesheet" href="./css/login.css">
-    <link rel="stylesheet" href="css/singUp.css">
+    <link rel="stylesheet" href="css/signUp.css">
     <title>Document</title>
 </head>
 
@@ -31,7 +31,7 @@
                 </ul>
             </div>
             <div class="down">
-                <button class="button" @click="onLogout">登出</button>
+                <button class="button" @click="onLogout" v-show="hasLogin()">登出</button>
             </div>
 
         </aside>
@@ -143,25 +143,25 @@
                 </div>
                 <div class="actions">
                     <button type="submit">提交</button>
-                    <a href="#" @click="singUpVisible= true;loginVisible= false;">注册</a>
+                    <a href="#" @click="signUpVisible= true;loginVisible= false;">注册</a>
                 </div>
             </form>
         </div>
-        <div v-show="singUpVisible" class="singUp" v-cloak>
-            <form class="form" @submit="onSingUp">
+        <div v-show="signUpVisible" class="signUp" v-cloak>
+            <form class="form" @submit="onsignUp">
                 <h2>注册</h2>
                 <button @click="onCloseLogin">关闭</button>
                 <div class="row">
                     <label>邮箱</label>
-                    <input type="text" v-model="singUp.email">
+                    <input type="text" v-model="signUp.email">
                 </div>
                 <div class="row">
                     <label>密码</label>
-                    <input type="password" v-model="singUp.password">
+                    <input type="password" v-model="signUp.password">
                 </div>
                 <div class="actions">
                     <button type="submit">提交</button>
-                    <a href="#" @click="singUpVisible= false;loginVisible= true;">登入</a>
+                    <a href="#" @click="signUpVisible= false;loginVisible= true;">登入</a>
                 </div>
             </form>
         </div>

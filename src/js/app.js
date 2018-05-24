@@ -3,7 +3,11 @@ var app = new Vue({
     data: {
         editingName: false,
         loginVisible: false,
-        singUpVisible: false,
+        signUpVisible: false,
+        currentUser: {
+            objectId:'',
+            email:''
+        },
         resume: {
             name: '姓名',
             gender: '女',
@@ -12,7 +16,7 @@ var app = new Vue({
             phone: '180123456789',
             email: '1@1.com'
         },
-        singUp: {
+        signUp: {
             email: '',
             password: ''
         },
@@ -23,14 +27,19 @@ var app = new Vue({
     },
     methods: {
         onEdit(key, value) {
-            console.log(key)
             this.resume[key] = value
         },
+        hasLogin(){
+            return !!this.currentUser.objectId
+        },
         onLogin(e) {
-            console.log(this.login)
-            AV.User.logIn(this.login.email, this.login.password).then(function (user) {
-                console.log(user);
-            }, function (error) {
+            AV.User.logIn(this.login.email, this.login.password).then((user)=> {
+                user = user.toJSON()
+                console.log(this)
+                this.currentUser.objectId = user.objectId
+                this.currentUser.email = user.email
+                this.loginVisible = false
+            }, (error)=> {
                 console.log(error)
                 if (error.code === 211) {
                     alert('邮箱未注册')
@@ -44,20 +53,26 @@ var app = new Vue({
             // 现在的 currentUser 是 null 了
             var currentUser = AV.User.current();
             alert('已注销')
+            window.location.reload()
         },
-        onSingUp(e) {
+        onsignUp(e) {
             e.preventDefault()
             // 新建 AVUser 对象实例
             const user = new AV.User();
             // 设置用户名
-            user.setUsername(this.singUp.email);
+            user.setUsername(this.signUp.email);
             // 设置密码
-            user.setPassword(this.singUp.password);
+            user.setPassword(this.signUp.password);
             // 设置邮箱
-            user.setEmail(this.singUp.email);
-            user.signUp().then(function (user) {
-                console.log(user);
-            }, function (error) {
+            user.setEmail(this.signUp.email);
+            user.signUp().then((user)=> {
+                alert('注册成功')
+                user = user.toJSON()
+                this.currentUser.objectId = user.objectId
+                this.currentUser.email = user.email
+                this.signUpVisible = false
+            }, (error) =>{
+                alert(error.rawMessage)
             });
         },
         onClickSave() {
@@ -90,12 +105,33 @@ var app = new Vue({
         },
         saveResume() {
             // 第一个参数是 className，第二个参数是 objectId
-            let { id } = AV.User.current()
-            var user = AV.Object.createWithoutData('User', id);
+            let { objectId } = AV.User.current().toJSON()
+            var user = AV.Object.createWithoutData('User', objectId);
             // 修改属性
             user.set('resume', this.resume);
             // 保存到云端
-            user.save();
+            user.save().then(()=>{
+                alert('保存成功')
+            },()=>{
+                alert('保存失败')
+            });
+        },
+        getResume(){
+            var query = new AV.Query('User');
+            query.get(this.currentUser.objectId).then((user)=> {
+              // 成功获得实例
+              // todo 就是 id 为 57328ca079bc44005c2472d0 的 Todo 对象实例
+              let resume = user.toJSON().resume
+              this.resume = resume
+            }, (error)=> {
+              // 异常处理
+            });
         }
     }
 })
+
+let currentUser = AV.User.current()
+if(currentUser){
+    app.currentUser = currentUser.toJSON()
+    app.getResume()
+}

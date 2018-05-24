@@ -1,4 +1,4 @@
-.singUp{
+.signUp{
     position: fixed;
     top: 50%;
     left: 50%;
@@ -10,7 +10,7 @@
     justify-content: center;
     align-items: stretch;
 }
-.singUp > .form{
+.signUp > .form{
     /* background: red; */
     width: 100%;
     /* height: 100%; */
