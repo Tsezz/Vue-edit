@@ -127,3 +127,12 @@ div[v-cloak]{
 .resume .projects header .start {
     display: flex;
 }
+
+.skills > ul >li{
+    position: relative;
+}
+.skills > ul >li .remove{
+    position: absolute;
+    top: 0;
+    right: 0;
+}

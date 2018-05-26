@@ -14,7 +14,13 @@ var app = new Vue({
             birthday: '1800年1月',
             jobTitle: '前端工程师',
             phone: '180123456789',
-            email: '1@1.com'
+            email: '1@1.com',
+            skills: [
+                {name:'技能名称',description:'描述'},
+                {name:'技能名称',description:'描述'},
+                {name:'技能名称',description:'描述'},
+                {name:'技能名称',description:'描述'}
+            ]
         },
         signUp: {
             email: '',
@@ -27,7 +33,27 @@ var app = new Vue({
     },
     methods: {
         onEdit(key, value) {
-            this.resume[key] = value
+            let regex = /\[(\d+)\]/g
+            key = key.replace(regex, (match, number)=> `.${number}`)
+            // key = skills.0.name
+            keys = key.split('.')
+            let result = this.resume
+            for(let i=0; i<keys.length; i++){
+                if (i === keys.length -1){
+                    result[keys[i]] = value
+                } else{
+                    result = result[keys[i]]
+                }               
+                //result = this.resume
+                //keys = ['skills','0','name']
+                //i=0 result === result['skills'] === this.resume.skills
+                //i=1 result === result['0'] === this.resume.skills.0
+                //i=2 result === result['name'] === this.resume.skills.0.name
+                //result === this.resume['skills']['0']['name']
+            }
+            // this.resume['skills']['0']['name'] = value
+            
+            //this.resume[key] = value   之前的
         },
         hasLogin(){
             return !!this.currentUser.objectId
@@ -122,10 +148,17 @@ var app = new Vue({
               // 成功获得实例
               // todo 就是 id 为 57328ca079bc44005c2472d0 的 Todo 对象实例
               let resume = user.toJSON().resume
-              this.resume = resume
+            //   this.resume = resume
+            Object.assign(this.resume, resume)
             }, (error)=> {
               // 异常处理
             });
+        },
+        addSkill(){
+            this.resume.skills.push({name:'技能', description:'技能描述'})
+        },
+        removeSkill(index){
+            this.resume.skills.splice(index, 1)
         }
     }
 })
