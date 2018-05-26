@@ -9,6 +9,12 @@ var app = new Vue({
             objectId: '',
             email: ''
         },
+        previewUser:{
+            objectId:undefined, 
+        },
+        previewResume:{
+            
+        },
         resume: {
             name: '姓名',
             gender: '女',
@@ -45,7 +51,20 @@ var app = new Vue({
             email: '',
             password: ''
         },
-        shareLink:'不知道'
+        shareLink:'不知道',
+        mode: 'edit' // 'preview'
+    },
+    computed:{
+        displayResume(){
+            return this.mode ==='preview' ? this.previewResume : this.resume
+        }
+    },
+    watch:{
+        'currentUser.objectId': function(newValue, oldValue){
+            if(newValue){
+                this.getResume(this.currentUser)
+            }
+        }
     },
     methods: {
         onEdit(key, value) {
@@ -158,14 +177,15 @@ var app = new Vue({
                 alert('保存失败')
             });
         },
-        getResume() {
+        getResume(user) {
             var query = new AV.Query('User');
-            query.get(this.currentUser.objectId).then((user) => {
+            return query.get(user.objectId).then((user) => {
                 // 成功获得实例
                 // todo 就是 id 为 57328ca079bc44005c2472d0 的 Todo 对象实例
                 let resume = user.toJSON().resume
                 //   this.resume = resume
-                Object.assign(this.resume, resume)
+                // Object.assign(this.resume, resume)
+                return resume
             }, (error) => {
                 // 异常处理
             });
@@ -186,13 +206,35 @@ var app = new Vue({
         },
         removeProject(index) {
             this.resume.projects.splice(index, 1)
+        },
+        print(){
+            window.print()
         }
     }
 })
 
+//获取登入用户
 let currentUser = AV.User.current()
 if (currentUser) {
     app.currentUser = currentUser.toJSON()
     app.shareLink = location.origin + location.pathname + '?user_id=' + app.currentUser.objectId
-    app.getResume()
+    app.getResume(app.currentUser).then(resume =>{
+        console.log(resume)
+        app.resume = resume
+        console.log(this)
+    })
+}
+
+//获取预览用户ID
+let search = location.search
+let regex = /user_id=([^&]+)/
+let matches = search.match(regex)
+let userId
+if(matches){
+    userId = matches[1]
+    app.mode = 'preview'
+    app.getResume({objectId: userId}).then(resume =>{
+        console.log(resume)
+        app.previewResume = resume
+    })
 }
