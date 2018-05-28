@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Tsezz/Vue-edit#readme",
   "dependencies": {
     "leancloud-storage": "^3.6.8",
-    "vue": "^2.5.13"
+    "vue": "^2.5.13",
+    "vue-router": "^3.0.1"
   }
 }
