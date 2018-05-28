@@ -200,23 +200,23 @@ var app = new Vue({
                 // 异常处理
             });
         },
-        addSkill() {
-            this.resume.skills.push({ name: '技能', description: '技能描述' })
-        },
-        removeSkill(index) {
-            this.resume.skills.splice(index, 1)
-        },
-        addProject() {
-            this.resume.projects.push({
-                name: '项目名称',
-                link: '链接',
-                keywords: '关键词',
-                description: '请详细描写'
-            })
-        },
-        removeProject(index) {
-            this.resume.projects.splice(index, 1)
-        },
+        // addSkill() {
+        //     this.resume.skills.push({ name: '技能', description: '技能描述' })
+        // },
+        // removeSkill(index) {
+        //     this.resume.skills.splice(index, 1)
+        // },
+        // addProject() {
+        //     this.resume.projects.push({
+        //         name: '项目名称',
+        //         link: '链接',
+        //         keywords: '关键词',
+        //         description: '请详细描写'
+        //     })
+        // },
+        // removeProject(index) {
+        //     this.resume.projects.splice(index, 1)
+        // },
         print(){
             window.print()
         },
